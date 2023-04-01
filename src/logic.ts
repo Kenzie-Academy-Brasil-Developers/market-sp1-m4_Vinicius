@@ -28,7 +28,7 @@ export const createProducts = (
   request.body.forEach((product: any) => {
     newProducts.push({
       id: id,
-      expirationDate: new Date(),
+      expirationDate: new Date().getFullYear() + 1,
       ...product,
     });
 
