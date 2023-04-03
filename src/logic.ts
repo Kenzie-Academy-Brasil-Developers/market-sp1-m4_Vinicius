@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { dataFoodProducts } from './database';
-import { IMarketProducts } from './interfaces';
+import { IMarketProducts, IProductsData } from './interfaces';
 
 let id = 1;
 
@@ -12,9 +12,10 @@ export const getProductsById = (
   request: Request,
   response: Response
 ): Response => {
-  const productById = dataFoodProducts.marketProducts.find(
-    (productId) => productId.id === Number(response.locals.product.id)
-  );
+  const productById: IMarketProducts | undefined =
+    dataFoodProducts.marketProducts.find(
+      (productId) => productId.id === Number(response.locals.product.id)
+    );
 
   return response.status(200).json(productById);
 };
@@ -25,10 +26,13 @@ export const createProducts = (
 ): Response => {
   const newProducts: IMarketProducts[] = [];
 
+  const date = new Date();
+  date.setDate(date.getDate() + 365);
+
   request.body.forEach((product: any) => {
     newProducts.push({
       id: id,
-      expirationDate: new Date().getFullYear() + 1,
+      expirationDate: date, // deve estar com esse formato: "2024-03-06T12:12:32.431Z"
       ...product,
     });
 
@@ -42,7 +46,7 @@ export const createProducts = (
 
   dataFoodProducts.marketProducts.push(...newProducts);
 
-  const newProductsResponse = {
+  const newProductsResponse: IProductsData = {
     ...dataFoodProducts,
     total: newProducts.reduce((acc, cur) => acc + cur.price, 0),
     marketProducts: [...newProducts],
@@ -55,7 +59,7 @@ export const updateProducts = (
   request: Request,
   response: Response
 ): Response => {
-  const verifyName = dataFoodProducts.marketProducts.findIndex(
+  const verifyName: number = dataFoodProducts.marketProducts.findIndex(
     (product) => product.name === request.body.name
   );
 
@@ -65,11 +69,11 @@ export const updateProducts = (
     });
   }
 
-  const updateProductIndex = dataFoodProducts.marketProducts.findIndex(
+  const updateProductIndex: number = dataFoodProducts.marketProducts.findIndex(
     (productsId) => productsId.id === Number(response.locals.product.id)
   );
 
-  const newObjectProduct = {
+  const newObjectProduct: IMarketProducts = {
     ...dataFoodProducts.marketProducts[updateProductIndex],
     ...request.body,
   };
@@ -83,7 +87,7 @@ export const deleteProducts = (
   request: Request,
   response: Response
 ): Response => {
-  const productIndex = dataFoodProducts.marketProducts.findIndex(
+  const productIndex: number = dataFoodProducts.marketProducts.findIndex(
     (productId) => productId.id == response.locals.product.id
   );
 

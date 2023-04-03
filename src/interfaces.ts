@@ -1,14 +1,6 @@
 export interface IProductsData {
-  name: string;
-  price: number;
-  weight: number;
-  expirationDate: string;
-  section: 'food' | 'cleaning';
-}
-
-export interface ICleaning {
   total: number;
-  marketProducts: Omit<IMarketProducts[], 'id' | 'calories'>;
+  marketProducts: IMarketProducts[];
 }
 
 export interface IMarketProducts {
