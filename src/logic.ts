@@ -32,7 +32,7 @@ export const createProducts = (
   request.body.forEach((product: any) => {
     newProducts.push({
       id: id,
-      expirationDate: date, // deve estar com esse formato: "2024-03-06T12:12:32.431Z"
+      expirationDate: date,
       ...product,
     });
 
